@@ -44,6 +44,10 @@
   <script src="static/js/bulma-carousel.min.js"></script>
   <script src="static/js/bulma-slider.min.js"></script>
   <script src="static/js/index.js"></script>
+
+  <!-- added by Weixuan -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
 
@@ -117,12 +121,12 @@
               <!-- WebUI link -->
               <!-- TODO: change link and host webUI -->
               <span class="link-block">
-                <a href="https://huggingface.co/spaces/WeixuanYuan/Sound_VAE" target="_blank"
+                <a href="https://huggingface.co/spaces/WeixuanYuan/DiffuSynth" target="_blank"
                 class="external-link button is-normal is-rounded is-dark">
                 <span class="icon">
                   <i class="fab fa-github"></i>
                 </span>
-                <span>WebUI</span>
+                <span>WebAPP</span>
                 </a>
               </span>
 
@@ -145,6 +149,13 @@
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
 
 
 <!--<section class="hero teaser" id="Video-Introduction">-->
@@ -191,6 +202,8 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
 <!--  </div>-->
 </section>
 
+
+
 <section>
   <div class="container is-max-desktop">
     <div class="columns is-centered">
@@ -214,7 +227,7 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
     <div class="columns is-centered">
       <div class="column is-four-fifths">
       <p>
-        A Gradio webapp implementing the workflow above is hosted <a href="https://huggingface.co/spaces/WeixuanYuan/Sound_VAE" target="_blank">here</a>.
+        A Gradio webapp implementing the workflow above is hosted <a href="https://huggingface.co/spaces/WeixuanYuan/DiffuSynth" target="_blank">here</a>.
       </p>
       </div>
     </div>
@@ -223,6 +236,23 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
   <br /> 
 </section>
 <!-- End paper abstract -->
+
+
+
+<!--&lt;!&ndash; Table of Contents Section &ndash;&gt;-->
+<!--<section class="hero is-light">-->
+<!--  <div class="hero-body">-->
+<!--    <div class="container">-->
+<!--      <h2 class="title is-3">Navigation</h2>-->
+<!--      <ul>-->
+<!--        <li><a href="#Text-to-musical-notes-comparison" style="color: blue; text-decoration: underline;">Text-to-Musical-Notes Comparison</a></li>-->
+<!--        <li><a id="stableInPaintLink" style="color: blue; text-decoration: underline; cursor: pointer;">StableInPaint Illustration</a></li>-->
+<!--      </ul>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+
 
 
 <section class="hero is-small is-light" id="Text-to-musical-notes-comparison">
@@ -679,7 +709,7 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">
-          Sampling with Different Guidance Scale (<em>w</em>)
+          Sampling with Different Guidance Scale (\( w \))
       </h2>
       <div class="columns is-centered is-four-fifths">
         <div class="column is-one-tenth has-text-centered">
@@ -716,7 +746,7 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
       </div>
 
       <h2>
-        Results of conditioned sampling with varying guidance scales <em>w</em>. As guidance scale increases, more high-frequency components are introduced into the spectrogram in line with the text description.
+        Results of conditioned sampling with varying guidance scales \( w \). As guidance scale increases, more high-frequency components are introduced into the spectrogram in line with the text description.
       </h2>
     </div>
   </div>
@@ -818,7 +848,7 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
       </div>
 
       <h2>
-        Smooth transitions in timbre are achieved by altering the guidance scale <em>w</em> (upper row), or by changing the noising strength through the initial time step <em>T_0</em> (lower row). The text description is ``guitar''.
+        Smooth transitions in timbre are achieved by altering the guidance scale \( w \) (upper row), or by changing the noising strength through the initial time step \( T_0 \) (lower row). The text description is ``guitar''.
       </h2>
     </div>
   </div>
@@ -827,257 +857,314 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
 
 
 
-<section class="hero is-small" id="Duration-Adjustment-Comparisons">
-  <div class="hero-body">
-    <div class="container">
-      <h2 class="title is-3">
-          Duration Adjustment Comparisons
-      </h2>
+<!--<section class="hero is-small" id="Duration-Adjustment-Comparisons">-->
+<!--  <div class="hero-body">-->
+<!--    <div class="container">-->
+<!--      <h2 class="title is-3">-->
+<!--          Duration Adjustment Comparisons-->
+<!--      </h2>-->
 
-      <div id="results-carousel" class="carousel results-carousel" data-interval="30">
-
-
+<!--      <div id="results-carousel" class="carousel results-carousel" data-interval="30">-->
 
 
-        <div class="item">
-          <h2 class="subtitle has-text-left">
-            Sample1:
-          </h2>
+<!--        <div class="item">-->
+<!--          <h2 class="subtitle has-text-left">-->
+<!--            Sample1:-->
+<!--          </h2>-->
 
-          <div class="columns is-multiline">
+<!--          <div class="columns is-multiline">-->
 
-            <!-- Column 1: Image (居中) -->
-            <div class="column is-one-tenth has-text-centered">
-              <img src="images/dc/sample2.png" alt="Image 1" style="width: 40%; height: auto;">
-            </div>
+<!--            &lt;!&ndash; Column 1: Image (居中) &ndash;&gt;-->
+<!--            <div class="column is-one-tenth has-text-centered">-->
+<!--              <img src="images/dc/sample2.png" alt="Image 1" style="width: 40%; height: auto;">-->
+<!--            </div>-->
 
-            <!-- Column 2: 6段 Audio，垂直排列 -->
-            <div class="column is-one-tenth">
-              <div class="content">
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/original/dc_36.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/envelope/dc_41.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/time_stretching/dc_54.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/RePaint_high_noise/dc_42.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/RePaint_low_noise/dc_43.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/StablePaint/dc_44.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--            &lt;!&ndash; Column 2: 6段 Audio，垂直排列 &ndash;&gt;-->
+<!--            <div class="column is-one-tenth">-->
+<!--              <div class="content">-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/original/dc_36.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/envelope/dc_41.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/time_stretching/dc_54.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/RePaint_high_noise/dc_42.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/RePaint_low_noise/dc_43.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample2/StablePaint/dc_44.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
 
 
 
-        <div class="item">
-          <h2 class="subtitle has-text-left">
-            Sample2:
-          </h2>
+<!--        <div class="item">-->
+<!--          <h2 class="subtitle has-text-left">-->
+<!--            Sample2:-->
+<!--          </h2>-->
 
-          <div class="columns is-multiline">
+<!--          <div class="columns is-multiline">-->
 
-            <!-- Column 1: Image (居中) -->
-            <div class="column is-one-tenth has-text-centered">
-              <img src="images/dc/sample5.png" alt="Image 1" style="width: 40%; height: auto;">
-            </div>
+<!--            &lt;!&ndash; Column 1: Image (居中) &ndash;&gt;-->
+<!--            <div class="column is-one-tenth has-text-centered">-->
+<!--              <img src="images/dc/sample5.png" alt="Image 1" style="width: 40%; height: auto;">-->
+<!--            </div>-->
 
-            <!-- Column 2: 6段 Audio，垂直排列 -->
-            <div class="column is-one-tenth">
-              <div class="content">
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/original/dc_55.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/envelope/dc_60.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/time_stretching/dc_65.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/RePaint_high_noise/dc_61.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/RePaint_low_noise/dc_62.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/StablePaint/dc_63.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
-
-        <div class="item">
-          <h2 class="subtitle has-text-left">
-            Sample3:
-          </h2>
-
-          <div class="columns is-multiline">
-
-            <!-- Column 1: Image (居中) -->
-            <div class="column is-one-tenth has-text-centered">
-              <img src="images/dc/sample4.png" alt="Image 1" style="width: 40%; height: auto;">
-            </div>
-
-            <!-- Column 2: 6段 Audio，垂直排列 -->
-            <div class="column is-one-tenth">
-              <div class="content">
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/original/dc_18.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/envelope/dc_23.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/time_stretching/dc_50.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/RePaint_high_noise/dc_24.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/RePaint_low_noise/dc_25.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/StablePaint/dc_26.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="item">
-          <h2 class="subtitle has-text-left">
-            Sample4:
-          </h2>
-
-          <div class="columns is-multiline">
-
-            <!-- Column 1: Image (居中) -->
-            <div class="column is-one-tenth has-text-centered">
-              <img src="images/dc/sample1.png" alt="Image 1" style="width: 40%; height: auto;">
-            </div>
-
-            <!-- Column 2: 6段 Audio，垂直排列 -->
-            <div class="column is-one-tenth">
-              <div class="content">
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/original/dc_0.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/envelope/dc_5.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/time_stretching/dc_46.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/RePaint_high_noise/dc_6.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/RePaint_low_noise/dc_7.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/StablePaint/dc_8.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--            &lt;!&ndash; Column 2: 6段 Audio，垂直排列 &ndash;&gt;-->
+<!--            <div class="column is-one-tenth">-->
+<!--              <div class="content">-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/original/dc_55.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/envelope/dc_60.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/time_stretching/dc_65.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/RePaint_high_noise/dc_61.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/RePaint_low_noise/dc_62.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample5/StablePaint/dc_63.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
 
 
 
-        <div class="item">
-          <h2 class="subtitle has-text-left">
-            Sample5:
-          </h2>
+<!--        <div class="item">-->
+<!--          <h2 class="subtitle has-text-left">-->
+<!--            Sample3:-->
+<!--          </h2>-->
 
-          <div class="columns is-multiline">
+<!--          <div class="columns is-multiline">-->
 
-            <!-- Column 1: Image (居中) -->
-            <div class="column is-one-tenth has-text-centered">
-              <img src="images/dc/sample3.png" alt="Image 1" style="width: 40%; height: auto;">
-            </div>
+<!--            &lt;!&ndash; Column 1: Image (居中) &ndash;&gt;-->
+<!--            <div class="column is-one-tenth has-text-centered">-->
+<!--              <img src="images/dc/sample4.png" alt="Image 1" style="width: 40%; height: auto;">-->
+<!--            </div>-->
 
-            <!-- Column 2: 6段 Audio，垂直排列 -->
-            <div class="column is-one-tenth">
-              <div class="content">
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/original/dc_9.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/envelope/dc_14.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/time_stretching/dc_48.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/RePaint_high_noise/dc_15.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/RePaint_low_noise/dc_16.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-                <audio controls style="width: 100%; margin-bottom: 60px;">
-                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/StablePaint/dc_17.wav" type="audio/wav">
-                  Your browser does not support the audio element.
-                </audio>
-              </div>
-            </div>
-          </div>
-        </div>
+<!--            &lt;!&ndash; Column 2: 6段 Audio，垂直排列 &ndash;&gt;-->
+<!--            <div class="column is-one-tenth">-->
+<!--              <div class="content">-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/original/dc_18.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/envelope/dc_23.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/time_stretching/dc_50.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/RePaint_high_noise/dc_24.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/RePaint_low_noise/dc_25.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample4/StablePaint/dc_26.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
 
-      </div>
-      <h2>
-        Comparison of different methods for extending 3-second musical notes to 5 seconds. Our method surpasses baselines in maintaining the similarity of timbre  (marked in blue), vibrato frequency (white), and the release stage (green) with the original samples, as well as consistency of timbre across the time domain (yellow). The envelope approach is not applicable for extending audio. Vibrato frequency refers to the rate at which the pitch of a note varies. The release stage is the period after a note stops being played. For example, after 5 seconds.
-      </h2>
-    </div>
-  </div>
-  <br />
-</section>
+<!--        <div class="item">-->
+<!--          <h2 class="subtitle has-text-left">-->
+<!--            Sample4:-->
+<!--          </h2>-->
+
+<!--          <div class="columns is-multiline">-->
+
+<!--            &lt;!&ndash; Column 1: Image (居中) &ndash;&gt;-->
+<!--            <div class="column is-one-tenth has-text-centered">-->
+<!--              <img src="images/dc/sample1.png" alt="Image 1" style="width: 40%; height: auto;">-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Column 2: 6段 Audio，垂直排列 &ndash;&gt;-->
+<!--            <div class="column is-one-tenth">-->
+<!--              <div class="content">-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/original/dc_0.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/envelope/dc_5.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/time_stretching/dc_46.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/RePaint_high_noise/dc_6.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/RePaint_low_noise/dc_7.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample1/StablePaint/dc_8.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+
+
+
+<!--        <div class="item">-->
+<!--          <h2 class="subtitle has-text-left">-->
+<!--            Sample5:-->
+<!--          </h2>-->
+
+<!--          <div class="columns is-multiline">-->
+
+<!--            &lt;!&ndash; Column 1: Image (居中) &ndash;&gt;-->
+<!--            <div class="column is-one-tenth has-text-centered">-->
+<!--              <img src="images/dc/sample3.png" alt="Image 1" style="width: 40%; height: auto;">-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Column 2: 6段 Audio，垂直排列 &ndash;&gt;-->
+<!--            <div class="column is-one-tenth">-->
+<!--              <div class="content">-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/original/dc_9.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/envelope/dc_14.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/time_stretching/dc_48.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/RePaint_high_noise/dc_15.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/RePaint_low_noise/dc_16.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--                <audio controls style="width: 100%; margin-bottom: 60px;">-->
+<!--                  <source src="duration_adjustment_examples/lengthen 3s notes to 5s/sample3/StablePaint/dc_17.wav" type="audio/wav">-->
+<!--                  Your browser does not support the audio element.-->
+<!--                </audio>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+
+
+<!--      </div>-->
+<!--      <h2>-->
+<!--        Comparison of different methods for extending 3-second musical notes to 5 seconds. Our method surpasses baselines in maintaining the similarity of timbre  (marked in blue), vibrato frequency (white), and the release stage (green) with the original samples, as well as consistency of timbre across the time domain (yellow). The envelope approach is not applicable for extending audio. Vibrato frequency refers to the rate at which the pitch of a note varies. The release stage is the period after a note stops being played. For example, after 5 seconds.-->
+<!--      </h2>-->
+<!--      <h2>-->
+<!--        Please click <span id="toggleWord" style="color: blue; text-decoration: underline; cursor: pointer;">here</span> for technical details.-->
+<!--      </h2>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <br />-->
+<!--</section>-->
+
+
+
+
+<!--&lt;!&ndash; Section with a slider (carousel), initially hidden &ndash;&gt;-->
+<!--<section id="stableInPaintSection" class="hero is-light" style="display: none; margin-top: 20px;">-->
+<!--  <div class="hero-body">-->
+<!--    <div class="container">-->
+<!--      <h2 class="title is-3">StableInPaint Illustration</h2>-->
+
+<!--      <div class="carousel-item">-->
+<!--        <div class="columns is-centered">-->
+<!--          <div class="column is-half">-->
+<!--            <div class="content">-->
+<!--              <figure class="image">-->
+<!--                <img src="images/StableInPaint.png" alt="Image for StableInPaint" style="width: 120%; height: auto;">-->
+<!--              </figure>-->
+<!--              <figcaption>-->
+<!--                A single-step visualization of the diffusion-based inpainting with the proposed dynamic mask schedule.-->
+<!--                The objective is to produce musical notes of varying lengths with consistent timbre. The outcome \( z_t \) at step \( t \),-->
+<!--                for \( t \) ranging from \( T - 1 \) to 0, results from a combination of two sources:-->
+<!--                1) The latent representation \( \tilde{z}_t \) denoised from the outcome \( z_{t+1} \) of the previous step using the-->
+<!--                trained diffusion model with an empty string as text description.-->
+<!--                2) The reshaped (see Fig. 5) and noise-added representation \( u'_t \) obtained from the latent representation \( u \)-->
+<!--                of the specific sound. Both sources are merged based on the mask \( M_t \) of the current time step, defined by-->
+<!--                a dynamic mask schedule. This method overcomes existing methods' disadvantages, such as mismatched release stages,-->
+<!--                distortion, and variations in vibrato frequency.-->
+<!--              </figcaption>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--</section>-->
+
+<!--<script>-->
+<!--  // JavaScript to toggle the section display when clicking on the word-->
+<!--  document.getElementById("toggleWord").addEventListener("click", function() {-->
+<!--    var section = document.getElementById("stableInPaintSection");-->
+
+<!--    if (section.style.display === "none") {-->
+<!--      section.style.display = "block";-->
+<!--    } else {-->
+<!--      section.style.display = "none";-->
+<!--    }-->
+<!--  });-->
+<!--</script>-->
+
+
+
+
+
+
+
 
 
 <!-- Section with a slider (carousel) -->
@@ -1147,6 +1234,16 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
     </div>
   </div>
 </section>
+
+
+
+
+
+
+
+
+
+
 
 
 
