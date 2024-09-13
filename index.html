@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
   <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="Text-Guided Diffusion-Based Model for Music Note Generation with Consistent Timbre">
-  <meta property="og:title" content="Text-Guided Diffusion-Based Model for Music Note Generation with Consistent Timbre"/>
-  <meta property="og:description" content="Webpage Demo for Text-Guided Diffusion-Based Model for Music Note Generation with Consistent Timbre"/>
+  <meta name="description" content="Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model">
+  <meta property="og:title" content="Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model"/>
+  <meta property="og:description" content="Project page for Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model"/>
   <!-- TODO: change this -->
   <meta property="og:url" content="https://yininghase.github.io/multi-agent-control/"/>
   <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
@@ -21,11 +21,11 @@
   <!-- <meta name="twitter:image" content="images/overview.jpg"> -->
   <!-- <meta name="twitter:card" content="summary_large_image"> -->
   <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="Text-Guided Diffusion-Based Model, Music Note, Consistent Timbre">
+  <meta name="keywords" content="Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>Text-Guided Diffusion-Based Model for Music Note Generation with Consistent Timbre</title>
+  <title>Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.icon">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -57,7 +57,7 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">Text-Guided Diffusion-Based Model for Music Note Generation with Consistent Timbre</h1>
+            <h1 class="title is-1 publication-title">Assisting Musicians with Generation of Musical Notes using a Text-Guided Diffusion Model</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
@@ -179,15 +179,11 @@
       <div class="column is-four-fifths">
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
-          <p>
-            In recent years, text-to-audio systems have achieved remarkable success, enabling the generation of complete audio segments, including music, directly from text descriptions. While these systems facilitate effortless music creation for general users, they often limit human creativity and deliberate expression for artists and musicians.
-In contrast, this work allows composers and arrangers —those who create melodies and transform them into music— to achieve desired timbres i.e. the unique quality of sounds,
-We introduce, a system that combines a latent diffusion model and multi-modal contrastive learning to generate the audio corresponding to musical notes conditioned on text descriptions of timbre.
+          <p>In recent years, text-to-audio systems have achieved remarkable success, enabling the generation of complete audio segments, directly from text descriptions. While these systems also facilitate music creation for general users, they often limit human creativity and deliberate expression for artists and musicians.</p>
 
-However, generating notes of varying lengths from only fixed-length training samples while maintaining stable \& consistent timbre across the notes is challenging for existing diffusion-based methods.
-To compensate for this, we introduce StablePaint, a novel inpainting technique, incorporating a dynamic mask schedule, to generate samples of varying lengths while preserving timbre consistency with a reference sound.
-Evaluation against both quantitative and qualitative metrics demonstrates that our method surpasses existing baselines in terms of sound quality, diversity, accuracy of text-based control, and timbre consistency.
-          </p>
+          <p>In contrast, this work allows composers and arrangers to create the basic building blocks for music creation: <i>Musical Notes</i>.</p>
+
+          <p>We introduce a system that combines a latent diffusion model and multi-modal contrastive learning to generate the musical notes conditioned on text descriptions. The diffusion model additionally allows the composer to manipulate the timbre of the note as desired.</p>
         </div>
       </div>
     </div>
@@ -218,7 +214,7 @@ Evaluation against both quantitative and qualitative metrics demonstrates that o
   <div class="container is-max-desktop">
     <div class="columns is-centered is-four-fifths">
       <div class="column is-four-fifths is-centered">
-        <img src="images/workflow.png" alt="MY ALT TEXT"/>
+        <img src="images/workflow_shortened.png" alt="MY ALT TEXT"/>
       </div> 
     </div>
   </div>
