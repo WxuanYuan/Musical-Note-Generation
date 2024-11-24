@@ -143,6 +143,12 @@
 <!--              </span>-->
 
             </div>
+            <p style="color: red;">
+            The WebApp will go into inactive sleep after a period of time. Please click 'Restart this Space' to wake it up, which may take up to 5 minutes to restart.
+            </p>
+
+
+
           </div>
         </div>
       </div>
@@ -1280,6 +1286,414 @@
     </div>
   </div>
 </footer>
+
+
+
+
+
+<section class="hero is-light">
+  <div class="hero-body">
+    <h2 class="title is-3">Insights of the model</h2>
+    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+
+      <!-- 图片及注释 -->
+      <div class="column is-four-fifths is-centered" style="display: flex; flex-direction: column; align-items: center;">
+        <img src="images/model_architecture.png" alt="Architecture Overview" />
+        <!-- 图片注释 -->
+        <div class="content" style="text-align: justify; max-width: 800px; margin-top: 10px; font-size: 14px;">
+          <p>
+            Architecture overview of our framework for fixed-length music note generation.
+            It combines multi-modal contrastive learning and latent diffusion models.
+            STFT+ and ISTFT+ represent the non-trainable time-frequency domain transformations of audio signals \(S\).
+            (see Spectral Representation Section) A pretrained LLM is used to augment labels such as "bright, guitar"
+            from the NSynth dataset to diverse text descriptions. The training is divided into three phases:
+          </p>
+          <ol>
+            <li>
+              A <strong>VQ-GAN</strong> (in yellow) is trained as an autoencoder for the spectral representation of real samples.
+              Its discriminator \(D\) is trained to distinguish spectral representations of real samples (i.e.~\(x\) for all training samples)
+              from those of generated samples (i.e.~\(\hat{x}\) for all training samples). The encoder, decoder, and quantizer are trained to fool
+              the discriminator, i.e.~to produce realistic~\(\hat{x}\).
+            </li>
+            <li>
+              A <strong>text encoder</strong> (pretrained using <a href="https://ieeexplore.ieee.org/abstract/document/10095889/" class="citation">CLAP</a>) and a timbre encoder (both shown in green) are trained to map
+              text descriptions and the timbre representation \(\hat{z}\) into a unified embedding space via contrastive learning.
+            </li>
+            <li>
+              A <strong>diffusion model</strong> (in blue) is trained to produce latent representations conditioned by the text embeddings.
+              During the inference stage, the output of the diffusion model is passed to the VQ-GAN decoder.
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 正文 -->
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <!-- Subsection: Text-conditioned Note Generation -->
+        <h3 class="title is-4" style="text-align: left;">Text-conditioned Note Generation</h3>
+        <h4 class="subtitle is-5" style="text-align: left;">Latent Representation on Notes:</h4>
+        <p>
+          We train the diffusion model on the lower-dimensional latent representation of the audio to expedite training.
+          The audio is first converted to a spectral <em>image</em> representation.
+          The Short-Time Fourier Transform (STFT) enables the conversion of an audio signal \(s\) into its magnitude and phase,
+          allowing for the near-lossless reconstruction of the original audio signal through the Inverse STFT (ISTFT).
+          Based on the STFT, we encode the audio signal \(s\) into a spectral representation \(x \in \mathbb{R}^{3 \times H \times W}\),
+          where the three channels correspond to log-magnitude, sine phase, and cosine phase, respectively.
+        </p>
+        <p>
+          We do not use mel-scaled spectrograms due to their tendency to compress high-frequency information, which is detrimental to high-quality music synthesis.
+        </p>
+        <p>
+          This spectral representation is compressed to and reconstructed from a latent representation
+          \(\hat{z} \in \mathbb{R}^{C \times \frac{H}{r} \times \frac{W}{r}}\), where \(C\) represents the number of channels,
+          and \(r\) denotes the spatial compression scale, via a <a href="https://openaccess.thecvf.com/content/CVPR2021/html/Esser_Taming_Transformers_for_High-Resolution_Image_Synthesis_CVPR_2021_paper.html?ref=" class="citation">VQ-GAN</a>.
+          As depicted in the yellow section of the Figure above,
+          the VQ-GAN features an encoder-decoder architecture, employing convolutional and transposed convolutional layers
+          with a stride of 2 for spatial downsampling and upsampling, respectively. The <a href="https://proceedings.neurips.cc/paper/2017/hash/7a98af17e63a0ac09ce2e96d03992fbc-Abstract.html" class="citation">quantizer</a> assigns each element
+          of the spatial dimensions to its nearest discrete value in a codebook.
+        </p>
+        <p>
+          Additionally, the VQ-GAN has a discriminator that distinguishes between the spectral representation of real samples
+          from the training set and those reconstructed by the decoder. This is trained adversarially against the encoder, decoder,
+          and quantizer.
+        </p>
+
+        <!-- Subsection: Contrastive Representation Learning -->
+        <h4 class="subtitle is-5" style="text-align: left;">Contrastive Representation Learning:</h4>
+        <p>
+          The multi-modal nature of our approach necessitates a shared representation between text and timbre.
+          To ensure this, we train a timbre-encoder and a text-encoder, which respectively map the latent audio representation
+          and text descriptions to their corresponding embeddings within a unified latent space.
+        </p>
+        <p>
+          This is achieved using contrastive loss by enhancing the cosine similarity between the embeddings of the text and timbre
+          within the same sample pair while promoting differentiation among different samples within the batch.
+          The approach takes inspiration from the <a href="https://proceedings.neurips.cc/paper/2016/hash/6b180037abbebea991d8b1232f8a8ca9-Abstract.html" class="citation">multi-class N-pair loss</a> utilized in <a href="https://proceedings.mlr.press/v139/radford21a" class="citation">CLIP</a>,
+          used for matching texts with images rather than audio.
+        </p>
+        <p>
+          The text-encoder is initialized with pretrained <a href="https://ieeexplore.ieee.org/abstract/document/10095889/" class="citation">CLAP</a> parameters, where CLAP is a multimodal pre-trained model
+          that bridges audio and text. In contrast, the timbre-encoder undergoes preliminary classification pre-training using the labels
+          from the NSynth dataset, before the joint training. We chose to fine-tune the model rather than using CLAP directly to better
+          align text and musical note features, rather than general sounds.
+        </p>
+        <p>
+          Uniquely for this task, since text descriptions are derived from labels, the dataset includes notes with identical labels,
+          resulting in semantically similar text descriptions for different samples.
+          When optimizing the batch-constructed symmetric cross-entropy loss, samples with similar text descriptions may be erroneously
+          considered negative pairs, which impedes model convergence.
+          Therefore, we avoid the co-existence of audio samples with <em>exactly</em> identical labels within a single batch during training
+          through data filtering.
+        </p>
+        <p>
+          More details on spectral representation, prompt engineering, learning objectives, and ablation studies using CLAP as the text encoder
+          can be found in the supplementary material.
+        </p>
+      </div>
+
+
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h4 class="subtitle is-5" style="text-align: left;">Denoising Diffusion on Latent Representations</h4>
+        <p>
+          Given pairs of latent representations and text embeddings \( (\hat{z}, e^{t}) \), we train a Denoising Diffusion Probabilistic Model (DDPM)
+          \( p_{\theta}(\hat{z}|e^{t}) \) that closely replicates the conditioned distribution \( q(\hat{z}|e^{t}) \).
+        </p>
+        <p>
+          <a href="https://proceedings.neurips.cc/paper/2020/hash/4c5bcfec8584af0d967f1ab10179ca4b-Abstract.html" class="citation">[DDPM]</a> engages in an iterative forward process defined on time steps \(t \in [1, \ldots, T]\), wherein noise \(\boldsymbol{\epsilon} \sim \mathcal{N}(0, \mathbf{I})\)
+          is incrementally added to true data points \(z_0:=\hat{z}\). This procedure is grounded on a predetermined noise schedule specified by
+          \(0 < \beta_1 < \cdots < \beta_t < \cdots < \beta_T < 1\), and is delineated as a Markov Chain in the following manner.
+        </p>
+        <p>
+          <strong>Forward Process Equations:</strong>
+        </p>
+        <p>
+          \( q(z_t | z_{t-1}) := \mathcal{N}(z_t; \sqrt{\alpha_t} z_{t-1}, \beta_t \mathbf{I}), \) <br>
+          \( q(z_t | z_0) := \mathcal{N}(z_t; \sqrt{\overline{\alpha}_t} z_0, (1 - \overline{\alpha}_t) \boldsymbol{\epsilon}), \)
+        </p>
+        <p>
+          where \( \alpha_{t} = 1-\beta_{t} \) and \( \bar{\alpha}_t := \prod_{s=1}^{t} \alpha_s \). The reverse process represents the inverse mechanism, delineating a generative model,
+          which reconstructs the original data points from the pure Gaussian noise. Specifically, in the task at hand, we are interested in the conditional joint distribution, defined as:
+        </p>
+        <p>
+          \( p_{\theta}(z_{0:T}|e^t) := p(z_T) \prod_{t=1}^{T} p_{\theta}(z_{t-1}|z_t,e^t), \)
+        </p>
+        <p>
+          where \( p(z_T) := \mathcal{N}(0, I) \) and \( e^t \) is the text embedding. The intermediate transitions are parameterized by estimations of a neural network
+          \( \boldsymbol{\epsilon}_{\theta} \):
+        </p>
+        <p>
+          \( p_{\theta}(z_{t-1}|z_t,e^t) := \mathcal{N}(z_{t-1}; \mu_{\theta}(z_t, t, e^t), \frac{1 - \hat{\alpha}_{t-1} \beta_{t}}{1 - \hat{\alpha}_{t}} I), \) <br>
+          \( \mu_{\theta}(z_t, t, e^t) := \frac{1}{\sqrt{\alpha_t}} \left( z_t - \frac{\beta_t}{\sqrt{1 - \hat{\alpha}_t}} \boldsymbol{\epsilon}_{\theta}(z_t, t, e^t) \right). \)
+        </p>
+        <p>
+          The neural network is trained to estimate the weighted noise by minimizing an adapted version of the <a href="https://arxiv.org/abs/1312.6114" class="citation">variational lower bound</a> of the negative log-likelihood :
+        </p>
+        <p>
+          \( L_{\textnormal{t}}^{\textnormal{simple}} = \mathbb{E}_{t, x_0, \boldsymbol{\epsilon}} \left[ \left\| \epsilon - \boldsymbol{\epsilon}_{\theta}(z_t, t, e^t) \right\|^2 \right]. \)
+        </p>
+        <p>
+          Furthermore, <a href="https://arxiv.org/abs/2207.12598" class="citation">classifier-free guidance</a> is applied during training, which involves randomly replacing the text embedding \( e^t \) with the embedding of an
+          empty string with probability \( p \).
+        </p>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+
+
+
+<section class="hero is-small">
+  <div class="hero-body">
+    <h2 class="title is-3">Model Hyperparameters and Training Configurations</h2>
+    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+
+      <!-- VQ-GAN -->
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h4 class="subtitle is-5" style="text-align: left;">VQ-GAN</h4>
+
+        <p>
+          <strong>Training Objective:</strong>
+        </p>
+        <p>
+          The objective in training the VQ-GAN involves minimizing a combination of a weighted reconstruction loss \(L_{\textnormal{rec}}\),
+          VQ loss \(L_{\textnormal{VQ}}\), and adversarial loss \(L_{\textnormal{adv}}\). Specifically, the weighted reconstruction loss for the spectral representation \(x\)
+          is designed channel-wise to achieve combined compression and reconstruction of magnitude and phase information. For the phase information in the latter two channels,
+          the Mean Absolute Error (MAE) is utilized, while for the log-magnitude in the first channel, a weighted Mean Absolute Error (wMAE) is employed to assign greater weight
+          to lower values, thereby reducing noise in low amplitudes.
+        </p>
+        <p>
+          For a spectral representation sample \(x\) and its reconstruction \(\hat{x}\), the loss for the generator, that is, the encoder-decoder structure, \(L_{\textnormal{G}}\),
+          and the discriminator loss \(L_{\textnormal{D}}\) are defined as follows:
+        </p>
+        <p>
+          \(L_{\textnormal{G}}(x, \hat{x}) := L_{\textnormal{rec}}(x, \hat{x}) + w_1 \cdot L_{\textnormal{VQ}} + w_2 \cdot L_{\textnormal{adv}}(\hat{x})\), <br>
+          \(L_{\textnormal{rec}}(x, \hat{x}) := \text{wMAE}(x_1, \hat{x}_1) + w_3 \cdot (\text{MAE}(x_2, \hat{x}_2) + \text{MAE}(x_3, \hat{x}_3))\), <br>
+          \(\text{wMAE}(x_1, \hat{x}_1) := \text{avg} \left(\frac{\left|\hat{x}_1 - x_1\right|}{\max(x_1, \epsilon)}\right)\), <br>
+          \(L_{\textnormal{adv}}(\hat{x}) := -\log D(\hat{x})\), <br>
+          \(L_{\textnormal{D}}(x, \hat{x}) := -\log D(x) - \log(1 - D(\hat{x}))\),
+        </p>
+        <p>
+          where \(D\) is the discriminator, \(w_1\), \(w_2\), \(w_3\) are weight parameters, \(x_i\) denotes the \(i\)-th channel of \(x\), and \(\epsilon\) is a hyper-parameter
+          that adjusts weights for lower log-magnitude values. In this work, we set \(w_1 = 10\), \(w_2 = 0.1\), \(w_3 = 1\), \(\epsilon = 0.001\).
+        </p>
+
+        <p>
+          <strong>Architecture:</strong>
+        </p>
+        <p>
+          The VQ-GAN model comprises an encoder, a decoder, a quantization layer, and a discriminator.
+        </p>
+        <p>
+          The encoder and decoder consist of alternating stacks of ResNet blocks, efficient attention modules, and down/up-sampling modules. Each ResNet block combines <a href="https://openaccess.thecvf.com/content_ECCV_2018/html/Yuxin_Wu_Group_Normalization_ECCV_2018_paper.html" class="citation">group normalization</a>, swish activation, and a 2D convolutional layer with kernel size 3, along with a skip connection that includes a convolution with kernel size 1.
+        </p>
+        <p>
+          The efficient attention module implements the attention mechanism with linear complexity. The down/up-sampling modules are convolution/transposed convolution layers with a stride of 2 and a kernel size of 4. The encoder features 6 ResNet blocks, 2 efficient attention modules, and two down-sampling modules. The input and output channels of the encoder are 3 and 4, while the hidden channels are 80 and 160. The decoder mirrors this structure but replaces down-sampling with up-sampling modules. Notably, the final activation layer of the decoder is specifically designed for generating spectral representations, using <em>softplus</em> activation for the first channel and <em>tanh</em> activation for the remaining two channels.
+        </p>
+        <p>
+          For the <a href="https://proceedings.neurips.cc/paper/2019/hash/5f8e2fa1718d1bbcadf1cd9c7a54fb8c-Abstract.html" class="citation">quantization layer</a>, we employ the implementation based on exponential moving averages. The codebook stores 8192 discrete entries, each with a channel size of 4.
+        </p>
+        <p>
+          The discriminator employs an <a href="https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html" class="citation">18-layer-ResNet architecture</a>, with the first layer replaced by a 2D convolutional layer that accommodates spectral representation inputs and the last two layers replaced by a binary classifier layer.
+        </p>
+        <p>
+          The VQ-GAN model has a total of 1.5M trainable parameters. It was trained using the Adam optimizer for 80,000 steps, with a batch size of 4 and a learning rate of \(1 \times 10^{-4}\).
+        </p>
+      </div>
+
+
+
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h4 class="subtitle is-5" style="text-align: left;">Contrastive Pretrain</h4>
+        <p>
+          The timbre-encoder consists of an <a href="https://sophieeunajang.wordpress.com/wp-content/uploads/2020/10/lstm.pdf" class="citation">LSTM</a>, four single-layer classifier heads, and a single-layer projection head.
+          The LSTM has a feature dimension of 512 and a hidden dimension of 1024, with three stacked layers.
+          It processes the latent representation \(z\) as a sequence of features along the temporal dimension,
+          corresponding to the time frames of the spectral representation \(x\). During the pretraining of the timbre-encoder,
+          the final feature output by the LSTM is passed to four classifier heads, which predict labels provided by the <a href="https://magenta.tensorflow.org/datasets/nsynth#motivation" class="citation">NSynth</a> dataset.
+          When jointly trained with the text-encoder, the LSTM's final feature is fed into the projection head,
+          mapping it to a multi-modal feature space with a dimension of 512.
+        </p>
+        <p>
+          The text-encoder utilizes the architecture and pretrained parameters of <a href="https://ieeexplore.ieee.org/abstract/document/10095889/" class="citation">CLAP</a>, along with a projection head.
+          The projection head is also single-layered, mapping the extracted text feature of dimension 512 to the multi-modal feature space.
+        </p>
+        <p>
+          The timbre-encoder has 25M trainable parameters and was pretrained using the Adam optimizer for 20,000 steps,
+          with a batch size of 64 and a learning rate of \(10^{-3}\). In the joint training phase, it is trained for 600,000 steps
+          with a batch size of 16, together with the text-encoder, which has 155M trainable parameters.
+          The optimizer used is AdamW, with a learning rate of \(10^{-5}\) and weight decay of \(10^{-3}\) for the text-encoder,
+          and a learning rate of \(10^{-4}\) and weight decay of \(10^{-6}\) for the timbre-encoder.
+          However, for the projection heads of both, the learning rate is set to \(10^{-4}\) with a weight decay of \(10^{-6}\).
+        </p>
+      </div>
+
+
+
+
+
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h4 class="subtitle is-5" style="text-align: left;">Diffusion Model</h4>
+        <p>
+          The diffusion model shares similarities with the VQ-GAN in its encoder-decoder structure and building components, namely the ResNet blocks and efficient attention modules.
+          However, it distinguishes itself by:
+        </p>
+        <ul>
+          <li>Incorporating skip connections between the encoder and decoder</li>
+          <li>Adding time embeddings to the feature maps</li>
+          <li>Transforming text embeddings and inserting them into the attention modules via cross attention</li>
+        </ul>
+        <p>
+          The total number of time steps \(T\) is set to 1000. A linear Beta schedule is used, with \(\beta_{1}=1 \times 10^{-4}\) and \(\beta_{T}=2 \times 10^{-2}\).
+          For classifier-free guidance, the probability of replacing text descriptions with the empty string is \(p=0.1\).
+        </p>
+        <p>
+          The models were trained using the Adam optimizer for 0.3M steps, with a batch size of 8 and a learning rate of \(10^{-4}\).
+          The training is conducted on a single NVIDIA T4 GPU, for approximately 70 hours.
+        </p>
+      </div>
+
+
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h4 class="subtitle is-5" style="text-align: left;">Baseline Models</h4>
+
+        <p>
+          <strong>GAN:</strong> Inspired by <a href="https://arxiv.org/abs/1902.08710" class="citation">GanSynth</a>, we trained a U-Net model using adversarial learning. This aimed to validate the superiority
+          of the diffusion model over GANs in generating musical notes. The primary distinction between our framework and the GAN-based approach lies in the
+          loss function, while the model architecture and training configurations remain unchanged.
+        </p>
+
+        <p>
+          <strong>Our Framework with Pretrained CLAP as Text-Encoder:</strong> To assess the benefits of contrastive pretraining, we employed the pre-trained
+          CLAP as the text encoder, without fine-tuning it on our dataset. We retrained the diffusion model within our framework, referring to this
+          model as <em>Ours_C</em>. The training settings were consistent with those used for <em>Ours</em>.
+        </p>
+
+        <p>
+          <strong>Our Framework with a Smaller Model Size:</strong> Additionally, we trained a diffusion model with a reduced channel size within our framework,
+          referred to as <em>Ours_S</em>. The training settings for this model were consistent with those of <em>Ours</em>.
+        </p>
+
+        <p>
+          <strong>AudioLDM and Adapted AudioLDM:</strong> We utilized <a href="https://arxiv.org/abs/2301.12503" class="citation"><em>AudioLDM</em></a>, which is pre-trained on a broad range of sound data including
+          musical notes, as a baseline. Furthermore, we adapted the AudioLDM diffusion model to our dataset, resulting in <em>AudioLDM_A</em> as another baseline.
+          This adaptation was performed using 2 NVIDIA T4 GPUs, involving 0.3M training steps over approximately 90 hours. This process demanded more computational
+          resources compared to our framework. The training configuration followed the author's recommendation, with a batch size of 2 and a learning rate of \(10^{-5}\).
+        </p>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<section class="hero is-light">
+  <div class="hero-body">
+    <h2 class="title is-3">Spectral Representation</h2>
+    <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+
+      <!-- 图片及图片注释 -->
+      <div class="column is-four-fifths is-centered" style="display: flex; flex-direction: column; align-items: center;">
+        <img src="images/spectral_representation.png" alt="Spectral Representation Illustration" />
+        <div class="content" style="text-align: justify; max-width: 800px; margin-top: 10px; font-size: 14px;">
+          <p>
+            Transformation between time signal \(s\) and spectral representation \(x\).
+          </p>
+        </div>
+      </div>
+
+      <!-- 正文 -->
+      <div class="content" style="text-align: justify; max-width: 800px; margin-top: 30px; font-size: 16px;">
+        <h3 class="title is-4" style="text-align: left;">Pseudo Code for STFT-based and ISTFT-based Transformation</h3>
+
+        <!-- STFT+ Pseudo Code -->
+        <div style="margin-top: 20px;">
+          <pre style="background-color: #f8f8f8; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 14px;">
+<strong>Algorithm STFT+(s)</strong>
+Input: time signal s
+Output: spectral representation x, which is a matrix with three channels representing log magnitude, cosine phase, and sine phase
+
+1. Compute complex spectrum matrix D
+   D <- STFT(s)
+
+2. Compute magnitude of D
+   magnitude <- absolute value of D
+
+3. Compute phase of D
+   phase <- angle of D
+
+4. Compute log magnitude
+   log_magnitude <- log(1 + magnitude)
+
+5. Compute cosine of phase
+   cos_phase <- cosine(phase)
+
+6. Compute sine of phase
+   sin_phase <- sine(phase)
+
+7. Encode as three channels, with channel dimension first
+   x <- stack(log_magnitude, cos_phase, sin_phase) along axis 0
+
+8. Return x
+          </pre>
+          <p style="font-style: italic; font-size: 14px; margin-top: 5px;">STFT-based spectral representation encoding pseudo code.</p>
+        </div>
+
+        <!-- ISTFT+ Pseudo Code -->
+        <div style="margin-top: 20px;">
+          <pre style="background-color: #f8f8f8; padding: 15px; border: 1px solid #ddd; overflow-x: auto; font-size: 14px;">
+<strong>Algorithm ISTFT+(x)</strong>
+Input: x, a spectral representation matrix with three channels representing log magnitude, cosine phase, and sine phase
+Output: time signal s
+
+1. Extract channels from x
+   log_magnitude <- first channel of x
+   cos_phase <- second channel of x
+   sin_phase <- third channel of x
+
+2. Invert log magnitude transformation
+   magnitude <- exp(log_magnitude) - 1
+
+3. Calculate phase
+   phase <- arctan2(sin_phase, cos_phase)
+
+4. Reconstruct the complex spectrum matrix from magnitude and phase
+   D <- magnitude * (cos(phase) + i * sin(phase))
+
+4. Reconstruct time signal
+   s <- ISTFT(D)
+
+5. Return s
+          </pre>
+          <p style="font-style: italic; font-size: 14px; margin-top: 5px;">ISTFT-based spectral representation decoding pseudo code.</p>
+        </div>
+
+        <p style="margin-top: 20px;">
+          As illustrated in the Figure above, and detailed in the pseudocode provided above, we encode the time signal \(s\)
+          into a spectral representation \(x\) using STFT and reconstruct \(s\) using ISTFT, along with processing on the spectral data.
+          Since \(x\) retains both magnitude and phase information, the representation and reconstruction of the time signal are almost lossless.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
 
 <!-- Statcounter tracking code -->
   
